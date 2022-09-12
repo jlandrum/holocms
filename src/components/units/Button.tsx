@@ -1,6 +1,6 @@
 interface ButtonProps {
   children: React.ReactNode | React.ReactNode[];
-  onClick?: () => void;
+  onClick?: (_: boolean) => void;
   type?: keyof typeof TYPE_DEFS;
   selected?: boolean;
   className?: string;
@@ -34,7 +34,7 @@ const DISABLED_TYPE_DEFS: any = {
 const Button = ({children, onClick, className, selected, disabled, collapsed, collapseView, type = 'default'}: ButtonProps) => {
   const handleClick = () => {
     if (!disabled) {
-      onClick?.();
+      onClick?.(true);
     }
   }
 

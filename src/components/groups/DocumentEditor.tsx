@@ -1,4 +1,4 @@
-import { useAppManager, useEditTarget } from "../units/ApplicationManager";
+import { useAppManager, useEditTarget, useSchema } from "../units/ApplicationManager";
 import Button from "../units/Button";
 import { BiCodeBlock, BiLayout, BiSave, BiShowAlt, BiPencil } from 'react-icons/bi';
 
@@ -12,6 +12,7 @@ import HoloDocument from "../../models/HoloDocument";
 const DocumentEditor = () => {
   const document = useEditTarget<HoloDocument>()!!;
   const appManager = useAppManager();
+  const schema = useSchema(document?.content?.schema);
 
   const [mode, setMode] = useState(1);
   const [type, setType] = useState(0);
@@ -97,11 +98,15 @@ const DocumentEditor = () => {
               </>
             )}
             { type === 1 && (
-              <div>
-                {
-                  content.map((block: any) => <Block content={block} />)
-                }
-              </div>
+              <>
+                <Text>Schema</Text>
+                <TextBox disabled value={schema?.name} />
+                <div>
+                  {
+                    content?.content?.map((block: any) => <Block content={block} />)
+                  }
+                </div>
+              </>
             )}
           </div>
         )

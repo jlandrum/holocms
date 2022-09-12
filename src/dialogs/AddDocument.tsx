@@ -1,12 +1,12 @@
 
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import { useAppManager } from '../components/units/ApplicationManager';
 import Button from '../components/units/Button';
 import { useClose } from '../components/units/Dialog';
 import Text from '../components/units/Text';
 import TextBox from '../components/units/TextBox';
 
-const AddSchemaItem = () => {
+const AddDocument = () => {
   const close = useClose();
   const appManager = useAppManager();
 
@@ -14,11 +14,11 @@ const AddSchemaItem = () => {
   const [key, setKey] = useState('');
 
   const addDocument = () => {
-    if (appManager.addDocument({type: 'document', title, key})) {
-      close();
-    } else {
-      alert('Could not create document.');
-    };
+    try {
+      appManager.addDocument({type: 'document', title, key})
+    } catch (e) {
+      alert('Could not create document: \n' + e);
+    }
   }
 
   return (
@@ -40,4 +40,4 @@ const AddSchemaItem = () => {
   )
 }
 
-export default memo(AddSchemaItem);
+export default AddDocument;

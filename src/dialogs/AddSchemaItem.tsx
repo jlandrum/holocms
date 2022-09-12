@@ -1,18 +1,22 @@
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import Button from '../components/units/Button';
-import { DialogViewProps, useClose } from '../components/units/Dialog';
+import Dialog, { DialogProps, useClose } from '../components/units/Dialog';
 import { SchemaItemTypes } from '../components/units/SchemaItemEditor';
 import Text from '../components/units/Text';
 import TextBox from '../components/units/TextBox';
 import { i } from '../lang/I18N';
 
-const AddSchemaItem = ({onAction}: DialogViewProps) => {
+interface AddSchemaItemProps {
+  onAdd: (type: string, title: string) => void;
+}
+
+const AddSchemaItem = ({onAdd}: AddSchemaItemProps) => {
   const close = useClose();
   const [selection, setSelection] = useState<string>();
   const [title, setTitle] = useState('');
 
   const onSelect = () => {
-    onAction?.({type: selection, title});
+    onAdd?.(selection!!, title);
     close();
   }
 
@@ -38,4 +42,13 @@ const AddSchemaItem = ({onAction}: DialogViewProps) => {
   )
 }
 
-export default memo(AddSchemaItem);
+
+interface AddSchemaItemDialogProps extends AddSchemaItemProps, Omit<DialogProps, 'children'> {}
+
+export const AddSchemaItemDialog = ({show, onClosed, onAdd}: AddSchemaItemDialogProps) => (
+  <Dialog onClosed={onClosed} show={show}>
+    {() => <AddSchemaItem onAdd={onAdd} />}
+  </Dialog>
+)
+
+export default AddSchemaItem;

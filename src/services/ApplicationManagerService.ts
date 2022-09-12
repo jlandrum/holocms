@@ -1,3 +1,4 @@
+import { i } from "../lang/I18N";
 import HoloDocument from "../models/HoloDocument";
 import Project from "../models/Project";
 import { Schema } from "../models/Schema";
@@ -77,14 +78,23 @@ export default class ApplicationManagerService {
     this.notifyUpdate('activeEditTargetChanged');
   }
 
-  addDocument(document: HoloDocument): boolean {
+  addDocument(document: HoloDocument) {
     if (this.activeSession?.documents?.find(it => it.key === document.key)) {
-      return false;
+      throw new Error(i("Document already exists"));
     }
     this.activeSession?.documents?.push(document);
     this.saveState();
     this.notifyUpdate('sessionsUpdated');
-    return true;
+  }
+
+  addSchema(schema: Schema) {
+    if (this.activeSession?.schemas?.find(it => it.name === schema.name)) {
+      throw new Error(i("Schema already exists"));
+    }
+    this.activeSession?.schemas?.push(schema);
+    this.saveState();
+    this.notifyUpdate('activeSessionChanged');
+    this.notifyUpdate('activeEditTargetChanged');
   }
 
   updateDocument(document: HoloDocument) {
@@ -101,7 +111,12 @@ export default class ApplicationManagerService {
   }
 
   updateSchema(schema: Schema) {
-    if (!this.activeSession) { return };
+    if (!this.activeSession) { 
+      throw new Error("No active session");
+    };
+    if (!this.activeSession?.schemas?.find(it => it.name === schema.name)) {
+      throw new Error("Schema does not exist");
+    }
     this.activeSession?.schemas.forEach(it => {
       if (it.id === schema.id) {
         Object.assign(it, schema);
@@ -112,6 +127,24 @@ export default class ApplicationManagerService {
     this.notifyUpdate('activeSessionChanged');
     this.notifyUpdate('activeEditTargetChanged');
   }
+
+  deleteSchema(schema: Schema) {
+    if (!this.activeSession) { 
+      throw new Error("No active session")
+    }
+    const index = this.activeSession?.schemas?.findIndex((s) => s.name === schema.name);
+    if (index >= 0) {
+      this.activeSession?.schemas?.splice(index, 1);
+    } else {
+      throw new Error("Schema not found");
+    }
+    this.activeForEdit = undefined;
+    this.activeSession.lastEvent = Date.now();
+    this.saveState();
+    this.notifyUpdate('activeSessionChanged');
+    this.notifyUpdate('activeEditTargetChanged');
+  }
+
 
   private getOrStartSession(): Session | undefined {
     const project = this.activeProject;    

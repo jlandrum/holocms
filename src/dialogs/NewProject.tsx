@@ -62,4 +62,4 @@ const NewProject = () => {
   )
 }
 
-export default memo(NewProject);
+export default NewProject;

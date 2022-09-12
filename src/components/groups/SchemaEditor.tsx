@@ -4,11 +4,13 @@ import { useAppManager, useEditTarget } from "../units/ApplicationManager";
 import SchemaItemEditor, { Feature } from "../units/SchemaItemEditor";
 import { set, get, cloneDeep } from 'lodash';
 import Button from "../units/Button";
-import { BiSave, BiPlus } from "react-icons/bi";
+import { BiSave, BiPlus, BiTrashAlt } from "react-icons/bi";
 import TextBox from "../units/TextBox";
 import Text from "../units/Text";
-import Dialog from "../units/Dialog";
-import AddSchemaItem from "../../dialogs/AddSchemaItem";
+import { ConfirmDialog } from "../../dialogs/Confirm";
+import { i } from "../../lang/I18N";
+import { AddSchemaItemDialog } from "../../dialogs/AddSchemaItem";
+import { useNotice } from "../../dialogs/Notice";
 
 const INDEX_REGEX = /\[(\d+)\]$/
 
@@ -16,10 +18,12 @@ const SchemaEditor = () => {
   const appManager = useAppManager();
   const schema = useEditTarget<Schema>();
   const modified = false;
+  const notice = useNotice();
   
   const [editedSchema, setEditedSchema] = useState(schema);
   const [showInsert, setShowInsert] = useState(false);
   const [showInsertKey, setShowInsertKey] = useState('');
+  const [showDelete, setShowDelete] = useState(false);
 
   useEffect(() => {
     setEditedSchema(schema);
@@ -41,7 +45,11 @@ const SchemaEditor = () => {
   }
 
   const updateSchema = () => {
-    appManager.updateSchema(editedSchema);
+    try {
+      appManager.updateSchema(editedSchema);
+    } catch (e) {
+      notice.showNotice(`Could not save schema: ${e}`);
+    }
   }
 
   const updateName = (name: string) => {
@@ -69,7 +77,7 @@ const SchemaEditor = () => {
     setShowInsert(true);
   }
 
-  const insert = ({type, title}: {type: string, title: string}) => {    
+  const insert = (type: string, title: string) => {    
     const rootKeyPath = showInsertKey.replace(INDEX_REGEX, '');
     const copy = cloneDeep(editedSchema);
 
@@ -92,9 +100,22 @@ const SchemaEditor = () => {
     setEditedSchema(copy);
   }
 
+  const deleteSchema = () => {
+    try {
+      appManager.deleteSchema(schema);
+    } catch (e) {
+      notice.showNotice(`Could not delete schema: ${e}`);
+    }
+    return true;
+  }
+
   return (
     <>
-      <Dialog View={AddSchemaItem} onAction={insert} show={showInsert !== false} onClosed={() => setShowInsert(false)} />
+      <ConfirmDialog onConfirm={deleteSchema} show={showDelete} onClosed={setShowDelete}>
+        {i('confirm--delete-schema')}
+      </ConfirmDialog>
+      <notice.Notice />
+      <AddSchemaItemDialog show={showInsert} onAdd={insert} onClosed={setShowInsert} />
       <div className="flex flex-col flex-grow bg-neutral-100 dark:bg-neutral-900">
         <div className="px-2 border-b border-b-neutral-300 dark:border-b-black p-1 flex flex-row gap-1 items-center">
           <TextBox inline className="px-2 text-sm truncate flex-shrink" value={editedSchema?.name} onValueChange={updateName} />
@@ -105,6 +126,9 @@ const SchemaEditor = () => {
           </Button>
           <Button type="icon" onClick={updateSchema}>
             <BiSave className="dark:text-white m-2" />
+          </Button>
+          <Button type="icon" onClick={setShowDelete}>
+            <BiTrashAlt className="dark:text-white m-2" />
           </Button>
         </div>
         <div className="flex flex-col flex-grow overflow-y-auto items-center p-2">

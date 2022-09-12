@@ -4,31 +4,27 @@ interface ContextProps {
   close: () => void;
 }
 
-export interface DialogViewProps {
-  onAction?: (data: any) => void;
-}
-
-interface DialogProps {
+export interface DialogProps {
   show?: boolean;
-  View: React.ComponentType<DialogViewProps>;
-  onClosed: () => void;
-  onAction?: (data: any) => void;
+  children: () => React.ReactElement;
+  onClosed: (shown: boolean) => void;
 }
 
 
 const DialogContext = createContext<ContextProps>({ close: () => {} });
 
-const Dialog = ({show = false, onAction, onClosed, View}: DialogProps) => {  
+const Dialog = ({show = false, onClosed, children}: DialogProps) => {  
   const [closing, setClosing] = useState(false);
   const [viewRef, setView] = useState<ReactElement|null>();
 
   useEffect(() => {
     if (show) {
       if (!viewRef) {
-        setView(<View onAction={onAction} />)
+        const View = children;
+        setView(<View />)
       }
     }
-  }, [View, onAction, show, viewRef]);
+  }, [children, show, viewRef]);
 
   const contextValue = useMemo(() => {
     return ({ close: () => {
@@ -36,7 +32,7 @@ const Dialog = ({show = false, onAction, onClosed, View}: DialogProps) => {
       setTimeout(() => {
         setClosing(false);
         setView(null);
-        onClosed();
+        onClosed(false);
       }, 300);
     }})
   }, [onClosed]);

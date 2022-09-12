@@ -27,7 +27,9 @@ const ProjectsPanel = ({collapsed}: ProjectsPanelProps) => {
 
   return (
     <>
-      <Dialog View={NewProject} show={showNewProject} onClosed={() => setShowNewProject(false)} />
+      <Dialog show={showNewProject} onClosed={() => setShowNewProject(false)}>
+        {() => <NewProject />}
+      </Dialog>
       <ToolPanel size={size} onSizeChanged={setSize} draggableArea>
         {
           projects.length === 0 ? (

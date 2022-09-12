@@ -1,5 +1,7 @@
 {
   "text": "Text",
   "array": "Array",
-  "layout": "Layout"
+  "layout": "Layout",
+  "confirm--delete-schema": "Are you sure you wish to delete this schema?",
+  "no-schemas": "No Schemas"
 }

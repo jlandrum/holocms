@@ -75,4 +75,9 @@ export const useSession = () => {
   return applicationManagerService.activeSession;
 }
 
+export const useSchema = (id: String) => {
+  const session = useSession();
+  return session?.schemas.find(it => it.id === id);
+}
+
 export default ApplicationManager;
