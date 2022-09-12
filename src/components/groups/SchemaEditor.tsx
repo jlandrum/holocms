@@ -82,7 +82,6 @@ const SchemaEditor = () => {
       }
     })();
     
-    console.error(rootKeyPath);
     (get(copy, rootKeyPath) as Array<SchemaType>).push(
       { 
         type: type as unknown as any, 
