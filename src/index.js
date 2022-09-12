@@ -4,6 +4,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+if (!window.HOLOCMS) {
+  window.HOLOCMS = {
+    accentColor: () => '#227755',
+    type: 'browser',
+    require: () => null,
+  }
+}
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
