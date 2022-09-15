@@ -7,14 +7,15 @@ interface ButtonProps {
   disabled?: boolean;
   collapsed?: boolean;
   collapseView?: React.ReactNode;
+  tabIndex?: number;
 }
 
 const TYPE_DEFS = {
   default: 'border text-sm dark:bg-neutral-700 dark:text-white bg-neutral-50 shadow border-neutral-300 self-center rounded-md dark:border-gray-700 px-4',
   primary: 'border text-sm accent-bg-text shadow border-neutral-300 self-center rounded-md dark:border-gray-500 dark:text-gray-300 px-4',  
   outline: 'border border-black self-center rounded-md dark:border-gray-500 dark:text-gray-300 hover:animate-rainbow transition-all px-4 py-2',
-  listItem: 'hover:accent-bg-text text-left px-2 rounded-sm text-xs border-neutral-300 w-auto dark:text-white dark:border-neutral-700',
-  listItemLarge: 'rounded-md text-sm mx-3 w-auto dark:text-white dark:border-neutral-700 bg-opacity-40 px-2.5 py-1.5',
+  listItem: 'hover:accent-bg-text hover:bg-opacity-80 text-left px-2 rounded-listItem text-xs border-neutral-300 w-auto dark:text-white dark:border-neutral-700',
+  listItemLarge: 'rounded-md text-sm mx-3 w-auto dark:text-white dark:border-neutral-700 bg-opacity-80 px-2.5 py-1.5',
   icon: 'hover:bg-black dark:hover:bg-black dark:hover:bg-opacity-20 hover:bg-opacity-10 block rounded-md bg-transparent transition-colors'
 }
 
@@ -31,14 +32,15 @@ const DISABLED_TYPE_DEFS: any = {
   primary: 'opacity-50'
 }
 
-const Button = ({children, onClick, className, selected, disabled, collapsed, collapseView, type = 'default'}: ButtonProps) => {
+const Button = ({children, onClick, className, selected, disabled, collapsed, collapseView, type = 'default', tabIndex = 1}: ButtonProps) => {
   const handleClick = () => {
     if (!disabled) {
       onClick?.(true);
     }
   }
 
-  return <button className={`cursor-default  ${TYPE_DEFS[type]} ${selected && SELECTED_TYPE_DEFS[type]} ${disabled && DISABLED_TYPE_DEFS[type]} ${className}`} 
+  return <button tabIndex={tabIndex}
+                 className={`cursor-default  ${TYPE_DEFS[type]} ${selected && SELECTED_TYPE_DEFS[type]} ${disabled && DISABLED_TYPE_DEFS[type]} ${className}`} 
                  onClick={handleClick}>{ collapsed ? collapseView : children}</button>
 }
 

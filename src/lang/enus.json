@@ -2,6 +2,7 @@
   "text": "Text",
   "array": "Array",
   "layout": "Layout",
+  "subschema": "Sub-Schema",
   "confirm--delete-schema": "Are you sure you wish to delete this schema?",
   "no-schemas": "No Schemas"
 }

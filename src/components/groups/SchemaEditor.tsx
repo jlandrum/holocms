@@ -18,7 +18,7 @@ const SchemaEditor = () => {
   const appManager = useAppManager();
   const schema = useEditTarget<Schema>();
   const modified = false;
-  const notice = useNotice();
+  const showNotice = useNotice();
   
   const [editedSchema, setEditedSchema] = useState(schema);
   const [showInsert, setShowInsert] = useState(false);
@@ -48,7 +48,7 @@ const SchemaEditor = () => {
     try {
       appManager.updateSchema(editedSchema);
     } catch (e) {
-      notice.showNotice(`Could not save schema: ${e}`);
+      showNotice(`Could not save schema: ${e}`);
     }
   }
 
@@ -84,6 +84,7 @@ const SchemaEditor = () => {
     const extraAttributes = (() => {
       switch (type) {
         case 'array':
+        case 'group':  
           return { items: [] };
         default:
           return {};
@@ -104,7 +105,7 @@ const SchemaEditor = () => {
     try {
       appManager.deleteSchema(schema);
     } catch (e) {
-      notice.showNotice(`Could not delete schema: ${e}`);
+      showNotice(`Could not delete schema: ${e}`);
     }
     return true;
   }
@@ -114,7 +115,6 @@ const SchemaEditor = () => {
       <ConfirmDialog onConfirm={deleteSchema} show={showDelete} onClosed={setShowDelete}>
         {i('confirm--delete-schema')}
       </ConfirmDialog>
-      <notice.Notice />
       <AddSchemaItemDialog show={showInsert} onAdd={insert} onClosed={setShowInsert} />
       <div className="flex flex-col flex-grow bg-neutral-100 dark:bg-neutral-900">
         <div className="px-2 border-b border-b-neutral-300 dark:border-b-black p-1 flex flex-row gap-1 items-center">
@@ -149,6 +149,7 @@ const SchemaEditor = () => {
             if (i === editedSchema?.items?.length - 1) { features.push('lastItem'); }
             return (
               <SchemaItemEditor features={features} 
+                                key={`items[${i}]`}
                                 item={item} 
                                 keyPath={`items[${i}]`} 
                                 onMove={move} 

@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import TextBox from "../units/TextBox";
 import Text from "../units/Text";
 import Frame from 'react-frame-component';
-import Block from "../units/Block";
 import HoloDocument from "../../models/HoloDocument";
+import SchemaContentEdtior from "../units/SchemaContentEditor";
 
 const DocumentEditor = () => {
   const document = useEditTarget<HoloDocument>()!!;
@@ -88,7 +88,7 @@ const DocumentEditor = () => {
       }
       {
         mode === 1 && (
-          <div className="p-2 flex flex-col gap-2 h-full">
+          <div className="p-2 flex flex-col gap-2 h-full overflow-y-auto scrollbar scrollbar-thin">
             <Text>Title</Text>
             <TextBox value={title} onValueChange={setTitle} />
             { type === 0 && (
@@ -101,11 +101,7 @@ const DocumentEditor = () => {
               <>
                 <Text>Schema</Text>
                 <TextBox disabled value={schema?.name} />
-                <div>
-                  {
-                    content?.content?.map((block: any) => <Block content={block} />)
-                  }
-                </div>
+                <SchemaContentEdtior schema={schema!!} />
               </>
             )}
           </div>

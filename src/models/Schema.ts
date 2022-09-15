@@ -1,3 +1,10 @@
+export const SchemaTypes  = [
+  'text', 
+  'group',
+  'array', 
+  'subschema',
+] as const;
+
 export interface Schema {
   type: 'schema';
   name: string;
@@ -6,7 +13,7 @@ export interface Schema {
 }
 
 export interface SchemaType {
-  type: 'text' | 'array';
+  type: keyof typeof SchemaTypes;
   name: string;  
   [key: string]: any;
 }

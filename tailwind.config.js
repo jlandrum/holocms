@@ -18,7 +18,7 @@ module.exports = {
       },
       opacity: {
         'nested': '0.025'
-      },
+      },     
       keyframes: {
         rainbow: {
           '0%': { 'border-color': 'hsl(0deg 50% 50%)' },
@@ -49,6 +49,9 @@ module.exports = {
         }
 
       },
+      borderRadius: {
+        listItem: '3px'
+      },
       animation: {
         rainbow: 'rainbow 10s linear infinite',
         slideInTop: 'slideInTop 300ms ease-in-out',
@@ -58,5 +61,7 @@ module.exports = {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar')({ nocompatible: true }),
+  ],
 }

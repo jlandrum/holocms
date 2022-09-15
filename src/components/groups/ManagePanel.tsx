@@ -29,7 +29,7 @@ const ManagePanel = () => {
       <Dialog show={showAddDocument} onClosed={() => setShowAddDocument(false)}>{() => <AddDocument />}</Dialog>
       <Dialog show={showAddSchema} onClosed={() => setShowAddSchema(false)}>{() => <AddSchema />}</Dialog>
       <ToolPanel type='inline' size={size} onSizeChanged={setSize}>
-        <div className='overflow-scroll flex-grow bg-neutral-100 dark:bg-neutral-900'>
+        <div className='overflow-scroll scrollbar-thin scrollbar-thumb-rounded-lg scrollbar-thumb-neutral-500 scrollbar-track-transparent flex-grow bg-neutral-100 dark:bg-neutral-900'>
           <div className='flex flex-row pl-4 pr-2 items-center justify-between text-neutral-500 dark:text-neutral-500'>
             <Text customStyle className='text-tiny py-1 font-bold'>
               Documents

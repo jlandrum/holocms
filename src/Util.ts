@@ -1,0 +1,1 @@
+export const plurality = (item: number) => item === 1 ? '' : 's';
