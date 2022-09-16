@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Text from './Text';
 
 interface TextBoxProps {
   value?: string;
-  area?: boolean;
   inline?: boolean;
   disabled?: boolean;
   onValueChange?: (value: string) => void;
   className?: string;
+  lines?: number;
 }
 
-const TextBox = ({value, onValueChange, className, disabled, inline, area}: TextBoxProps) => {
+const TextBox = ({value, onValueChange, className, disabled, inline, lines = 1}: TextBoxProps) => {
   const [editMode, setEditMode] = useState(false);
   
-  if (area) {
+  if (lines !== 1) {
     return (
       <textarea
+      style={{maxLines: lines, minHeight: 18 * lines}}
       value={value}  
       className={`${className} resize-none dark:bg-neutral-800 dark:text-white dark:border-b-neutral-700 border-b shadow-sm rounded-md outline-none px-2 py-0.5 text-sm`}
       onChange={(e) => onValueChange?.(e.target.value)}>

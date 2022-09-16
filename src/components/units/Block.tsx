@@ -1,18 +1,23 @@
-import { i } from "../../lang/I18N";
-import { SchemaType, SchemaTypes } from "../../models/Schema";
+import { SchemaType } from "../../models/Schema";
 import Session from "../../models/Session";
 import { useSession } from "./ApplicationManager";
 import ArrayBlock from "./ArrayBlock";
-import SchemaContentEdtior from "./SchemaContentEditor";
-import SchemaItemEditor from "./SchemaItemEditor";
+import SchemaContentEditor from "./SchemaContentEditor";
 import TextBox from "./TextBox";
 
 interface BlockProps {
   type: SchemaType;
 }
 
-const TextBlock = () => {
-  return <TextBox />
+const TextBlock = ({type}: {type: SchemaType}) => {
+  return (
+    <div className={`flex gap-2 ${type.textArea && 'flex-col'}`}>
+      <span className="">
+        {type?.name}
+      </span>
+      <TextBox lines={type.textArea ? 5 : 1} className="flex-grow" />
+    </div>
+  )
 }
 
 const ErrorBlock = ({children}: {children: string}) => {
@@ -22,18 +27,18 @@ const ErrorBlock = ({children}: {children: string}) => {
 const renderTypeEditor = (schemaType: SchemaType, session: Session) => {
   switch (schemaType.type) {
     case 'text':
-      return <TextBlock />
+      return <TextBlock type={schemaType} />
     case 'group':
-      return <SchemaContentEdtior schema={schemaType.items} />
+      return <SchemaContentEditor schema={schemaType.items} />
     case 'subschema':
       const schema = session.schemas.find(it => it.id === schemaType.schema);
       if (schema) {
-        if (schemaType.array) return <ArrayBlock schemaType={schema.items} />
-        else return <SchemaContentEdtior schema={schema} />
+        if (schemaType.array) return <ArrayBlock title={schema.name} schemaType={schema.items} />
+        else return <SchemaContentEditor schema={schema} />
       }
       return <ErrorBlock>No Schema Selected</ErrorBlock>
     case 'array':
-      return <ArrayBlock schemaType={schemaType}/>  
+      return <ArrayBlock title={schemaType.name} schemaType={schemaType}/>  
     default:
       return <></>
   }
@@ -44,9 +49,6 @@ const Block = ({type}: BlockProps) => {
 
   return (
     <div className="text-xs flex flex-col p-2 gap-2">
-      <span className="">
-        {type?.name}
-      </span>
       {renderTypeEditor(type, session!!)}
     </div>
   )

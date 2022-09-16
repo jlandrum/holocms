@@ -23,7 +23,6 @@ const SchemaEditor = () => {
   const [editedSchema, setEditedSchema] = useState(schema);
   const [showInsert, setShowInsert] = useState(false);
   const [showInsertKey, setShowInsertKey] = useState('');
-  const [showDelete, setShowDelete] = useState(false);
 
   useEffect(() => {
     setEditedSchema(schema);
@@ -110,11 +109,12 @@ const SchemaEditor = () => {
     return true;
   }
 
+  const showDeleteDialog = () => {
+    showNotice(i('confirm--delete-schema'), 'Delete', 'Cancel', deleteSchema);
+  }
+
   return (
     <>
-      <ConfirmDialog onConfirm={deleteSchema} show={showDelete} onClosed={setShowDelete}>
-        {i('confirm--delete-schema')}
-      </ConfirmDialog>
       <AddSchemaItemDialog show={showInsert} onAdd={insert} onClosed={setShowInsert} />
       <div className="flex flex-col flex-grow bg-neutral-100 dark:bg-neutral-900">
         <div className="px-2 border-b border-b-neutral-300 dark:border-b-black p-1 flex flex-row gap-1 items-center">
@@ -127,7 +127,7 @@ const SchemaEditor = () => {
           <Button type="icon" onClick={updateSchema}>
             <BiSave className="dark:text-white m-2" />
           </Button>
-          <Button type="icon" onClick={setShowDelete}>
+          <Button type="icon" onClick={showDeleteDialog}>
             <BiTrashAlt className="dark:text-white m-2" />
           </Button>
         </div>

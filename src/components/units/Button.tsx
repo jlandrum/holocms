@@ -11,12 +11,15 @@ interface ButtonProps {
 }
 
 const TYPE_DEFS = {
-  default: 'border text-sm dark:bg-neutral-700 dark:text-white bg-neutral-50 shadow border-neutral-300 self-center rounded-md dark:border-gray-700 px-4',
-  primary: 'border text-sm accent-bg-text shadow border-neutral-300 self-center rounded-md dark:border-gray-500 dark:text-gray-300 px-4',  
+  default: 'border ui-shadow text-sm dark:bg-neutral-700 dark:text-white bg-neutral-50 border-neutral-300 self-center rounded-md dark:border-neutral-900 px-4',
+  primary: 'border ui-shadow text-sm accent-bg-text border-neutral-300 self-center rounded-md dark:border-neutral-900 dark:text-gray-300 px-4',  
   outline: 'border border-black self-center rounded-md dark:border-gray-500 dark:text-gray-300 hover:animate-rainbow transition-all px-4 py-2',
   listItem: 'hover:accent-bg-text hover:bg-opacity-80 text-left px-2 rounded-listItem text-xs border-neutral-300 w-auto dark:text-white dark:border-neutral-700',
   listItemLarge: 'rounded-md text-sm mx-3 w-auto dark:text-white dark:border-neutral-700 bg-opacity-80 px-2.5 py-1.5',
-  icon: 'hover:bg-black dark:hover:bg-black dark:hover:bg-opacity-20 hover:bg-opacity-10 block rounded-md bg-transparent transition-colors'
+  icon: 'hover:bg-black dark:hover:bg-black dark:hover:bg-opacity-20 hover:bg-opacity-10 block rounded-md bg-transparent transition-colors',
+  unstyled: '',
+  large: 'bg-black bg-opacity-20 rounded-lg text-black text-sm p-1.5',
+  largePrimary: 'bg-accent rounded-lg text-white text-sm p-1.5',
 }
 
 const SELECTED_TYPE_DEFS: any = {

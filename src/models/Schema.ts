@@ -3,6 +3,7 @@ export const SchemaTypes  = [
   'group',
   'array', 
   'subschema',
+  'document'
 ] as const;
 
 export interface Schema {

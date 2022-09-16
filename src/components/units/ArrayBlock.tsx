@@ -7,10 +7,11 @@ import { isArray } from "lodash";
 import { plurality } from "../../Util";
 
 interface ArrayBlockProps {
+  title: string;
   schemaType: SchemaType | SchemaType[];
 }
 
-const ArrayBlock = ({schemaType}: ArrayBlockProps) => {
+const ArrayBlock = ({title, schemaType}: ArrayBlockProps) => {
   const [items, setItems] = useState<any[]>([]);
   const [collapsed, setCollapsed] = useState(true);
 
@@ -19,7 +20,10 @@ const ArrayBlock = ({schemaType}: ArrayBlockProps) => {
   const Arrow = collapsed ? BiDownArrow : BiUpArrow;
 
   return (
-    <div className="flex flex-col flex-grow gap-2 dark:bg-neutral-500 dark:bg-opacity-5 p-1 rounded-md">
+    <div className="flex flex-col flex-grow gap-2 bg-neutral-500 bg-opacity-5 dark:bg-neutral-500 dark:bg-opacity-5 p-1 rounded-md">
+      <span className="">
+        {title}
+      </span>
       <div className="items-center rounded-md p-1 flex flex-row">
         <span className="text-tiny">{items.length || 0} item{plurality(items.length || 0)}</span>
         <div className="flex-grow" />

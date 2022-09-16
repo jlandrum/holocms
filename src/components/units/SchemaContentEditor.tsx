@@ -1,5 +1,5 @@
 import { isArray } from "lodash";
-import { Schema, SchemaType, SchemaTypes } from "../../models/Schema"
+import { Schema, SchemaType } from "../../models/Schema"
 import Block from "./Block";
 
 interface SchemaContentEdtiorProps {
@@ -13,8 +13,8 @@ const mapSchemaToBlock = (schemaType: SchemaType) => (
 const SchemaContentEditor = ({schema}: SchemaContentEdtiorProps) => {
   const items = isArray(schema) ? schema : schema.items;
   return (  
-    <div className="border border-black rounded-md flex flex-col">
-      { items.map(mapSchemaToBlock) }
+    <div className="border border-neutral-200 dark:border-black rounded-md flex flex-col">
+      { items?.map(mapSchemaToBlock) }
     </div>
   )
 }

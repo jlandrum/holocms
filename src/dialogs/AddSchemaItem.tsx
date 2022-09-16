@@ -27,7 +27,7 @@ const AddSchemaItem = ({onAdd}: AddSchemaItemProps) => {
         <Text className='text-bold'>Title</Text>
         <TextBox value={title} onValueChange={setTitle} />
       </div>
-      <div className='border border-neutral-300 rounded-md p-2 bg-white dark:bg-black dark:border-neutral-800 flex flex-col h-32 overflow-scroll scrollbar-thin scrollbar-thumb-rounded-lg scrollbar-thumb-neutral-500 scrollbar-track-transparent'>
+      <div className='border border-neutral-300 rounded-md p-2 bg-white dark:bg-black dark:border-neutral-800 flex flex-col h-32 overflow-scroll scrollbar-thin scrollbar-thumb-rounded-lg scrollbar-thumb-neutral-500 scrollbar-track-transparent'>        
         { SchemaTypes.map(type => (
           <Button key={type} type='listItem' selected={selection === type} onClick={() => setSelection(type)}>{i(type)}</Button>
         ))}

@@ -5,14 +5,17 @@ import { BiCodeBlock, BiLayout, BiSave, BiShowAlt, BiPencil } from 'react-icons/
 import { useEffect, useState } from "react";
 import TextBox from "../units/TextBox";
 import Text from "../units/Text";
-import Frame from 'react-frame-component';
 import HoloDocument from "../../models/HoloDocument";
-import SchemaContentEdtior from "../units/SchemaContentEditor";
+import DocumentPreview from "./DocumentPreview";
+import DocumentTextEditor from "./DocumentTextEditor";
+import DocumentBlockEditor from "./DocumentBlockEditor";
+import { useNotice } from "../../dialogs/Notice";
+import { i } from "../../lang/I18N";
 
 const DocumentEditor = () => {
   const document = useEditTarget<HoloDocument>()!!;
   const appManager = useAppManager();
-  const schema = useSchema(document?.content?.schema);
+  const showNotice = useNotice();
 
   const [mode, setMode] = useState(1);
   const [type, setType] = useState(0);
@@ -20,7 +23,7 @@ const DocumentEditor = () => {
   const [title, setTitle] = useState(document?.title);
   const [content, setContent] = useState(document?.content)
 
-  const modified = title !== document?.title || content  !== document?.content;
+  const modified = title !== document?.title || content !== document?.content;
 
   const ModeIcon = (() => {
     switch (mode) {
@@ -35,7 +38,7 @@ const DocumentEditor = () => {
   const toggleMode = () => setMode((mode + 1) % 2)
 
   const updateDocument = () => {
-    const newDoc = {...document!!, title: title || '', content};
+    const newDoc = { ...document!!, title: title || '', content };
     appManager.updateDocument(newDoc);
   }
 
@@ -44,6 +47,24 @@ const DocumentEditor = () => {
     setContent(document.content || '');
     setType(typeof document.content === "object" ? 1 : 0);
   }, [document]);
+
+  const setTypeAndContent = (type: number) => {
+    showNotice(i('confirm--change-type'),
+               i('change-type'),
+               i('cancel'),
+               () => {
+                switch (type) {
+                  case 0:
+                    setContent('');
+                    setType(0);
+                    break;
+                  case 1:
+                    setContent({ schema: '', content: []});
+                    setType(1);
+                    break;
+                }            
+               });
+  }
 
   return (
     <div className="flex flex-col flex-grow bg-neutral-100 dark:bg-neutral-900">
@@ -54,12 +75,12 @@ const DocumentEditor = () => {
         <span className="text-sm truncate flex-shrink">{document?.title}</span>
         <span className={`text-xxs italic opacity-0 transition-opacity truncate ${modified && 'opacity-100'}`}>(modified)</span>
         <div className="flex-grow" />
-        { mode === 1 && (
+        {mode === 1 && (
           <>
-            <Button selected={type === 0} type='icon' onClick={() => setType(0)}>
+            <Button selected={type === 0} type='icon' onClick={() => setTypeAndContent(0)}>
               <BiCodeBlock className="m-2" />
             </Button>
-            <Button selected={type === 1} type='icon' onClick={() => setType(1)}>
+            <Button selected={type === 1} type='icon' onClick={() => setTypeAndContent(1)}>
               <BiLayout className="m-2" />
             </Button>
           </>
@@ -69,41 +90,16 @@ const DocumentEditor = () => {
         </Button>
 
       </div>
-      {
-        mode === 0 && (
-          <>
-            <div className="bg-red-800 text-white p-2 flex">
-              <span className="text-tiny leading-none">
-                Warning: A preview URL was not provided; Standard HTML will be displayed instead.
-              </span>
-            </div>
-            <Frame title={document?.key} className="bg-white h-full w-full">
-              <h1>
-                {title}
-              </h1>
-              <main dangerouslySetInnerHTML={{__html: content}} />
-            </Frame>
-          </>
-        )
-      }
+      {mode === 0 && <DocumentPreview document={document} />}
       {
         mode === 1 && (
           <div className="p-2 flex flex-col gap-2 h-full overflow-y-auto scrollbar scrollbar-thin">
             <Text>Title</Text>
             <TextBox value={title} onValueChange={setTitle} />
-            { type === 0 && (
-              <>
-                <Text>Content (HTML)</Text>
-                <TextBox area className="flex-grow" value={content} onValueChange={setContent} />
-              </>
-            )}
-            { type === 1 && (
-              <>
-                <Text>Schema</Text>
-                <TextBox disabled value={schema?.name} />
-                <SchemaContentEdtior schema={schema!!} />
-              </>
-            )}
+            {type === 0 && (
+              <DocumentTextEditor content={content} setContent={setContent}></DocumentTextEditor>)}
+            {type === 1 && (
+              <DocumentBlockEditor content={content} setContent={setContent}></DocumentBlockEditor>)}
           </div>
         )
       }

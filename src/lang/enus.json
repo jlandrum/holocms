@@ -4,5 +4,8 @@
   "layout": "Layout",
   "subschema": "Sub-Schema",
   "confirm--delete-schema": "Are you sure you wish to delete this schema?",
+  "confirm--change-type": "Changing the document type will clear it's contents. Continue?",
+  "change-type": "Change Type",
+  "cancel": "Cancel",
   "no-schemas": "No Schemas"
 }

@@ -2,7 +2,6 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import ApplicationManagerService from "../../services/ApplicationManagerService";
 import { v4 as uuidv4 } from 'uuid';
 import Project from "../../models/Project";
-import Session from "../../models/Session";
 import HoloDocument from "../../models/HoloDocument";
 import { Schema } from "../../models/Schema";
 

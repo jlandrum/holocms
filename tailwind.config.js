@@ -15,6 +15,7 @@ module.exports = {
       },
       colors: {
         highlight: 'hsl(180, 20%, 55%)',
+        accent: 'var(--tw-accent)',
       },
       opacity: {
         'nested': '0.025'
@@ -50,7 +51,8 @@ module.exports = {
 
       },
       borderRadius: {
-        listItem: '3px'
+        listItem: '3px',
+        input: '4px',
       },
       animation: {
         rainbow: 'rainbow 10s linear infinite',

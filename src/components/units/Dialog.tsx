@@ -39,8 +39,9 @@ const Dialog = ({show = false, onClosed, children}: DialogProps) => {
   
   return <>
     <DialogContext.Provider value={contextValue}>
-      <div className={`${closing ? 'animate-fadeOut' : 'animate-fadeIn'} ${show ? '' : 'hidden'} z-50 w-screen h-screen bg-neutral-500 dark:bg-black dark:bg-opacity-40 bg-opacity-30 backdrop-contrast-60 backdrop-saturate-50 backdrop-brightness-90 b absolute left-0 top-0 flex justify-around items-center`}>
-        <div className={`${closing ? 'animate-slideOutTop' : 'animate-slideInTop'} bg-slate-100 dark:bg-neutral-900 p-1 border border-neutral-400 dark:border-neutral-800 shadow-xl flex-grow-0 rounded-xl bg-opacity-90 backdrop-blur-3xl`}>
+      <div className={`${closing ? 'animate-fadeOut' : 'animate-fadeIn'} ${show ? '' : 'hidden'} z-50 w-screen h-screen bg-neutral-500 dark:bg-black dark:bg-opacity-40 bg-opacity-30 backdrop-contrast-60 backdrop-saturate-50 backdrop-brightness-90 b fixed left-0 top-0 flex justify-around items-center`}/>
+      <div className={`${closing ? 'animate-fadeOut' : 'animate-fadeIn'} ${show ? '' : 'hidden'} fixed top-0 left-0 z-50 w-screen h-screen flex justify-center items-center`}>
+        <div className={`${closing ? 'animate-slideOutTop' : 'animate-slideInTop'} dark:bg-neutral-900 p-1 border border-neutral-400 dark:border-neutral-800 shadow-xl flex-grow-0 rounded-xl bg-white`}>
           <div className='p-3'>
             {viewRef}
           </div>

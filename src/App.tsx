@@ -21,12 +21,13 @@ function App() {
   const accentText = hexToRgb(fontColorContrast(HOLOCMS.accentColor()));
   const browser = HOLOCMS.type === 'browser';
 
-  console.error(rgbToTailwindAlpha(accentColor));
-
   return (
     <>
       <style>{
       `
+        :root {
+          --tw-accent: ${accentColor};
+        }
         * {
           user-select: none;
         }
