@@ -2,8 +2,11 @@ export const SchemaTypes  = [
   'text', 
   'group',
   'array', 
+  'boolean',
+  'select',
   'subschema',
-  'document'
+  'document',
+  'any'
 ] as const;
 
 export interface Schema {
@@ -15,6 +18,7 @@ export interface Schema {
 
 export interface SchemaType {
   type: keyof typeof SchemaTypes;
-  name: string;  
+  name: string;
+  key: string;
   [key: string]: any;
 }

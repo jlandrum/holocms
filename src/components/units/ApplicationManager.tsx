@@ -32,7 +32,7 @@ export const useProjectList = () => {
     return () => applicationManagerService.removeEventListeners(id);
   }, [id]);
   const [projects, setProjects] = useState<Array<Project>>(applicationManagerService.projects);
-  return projects;
+  return projects || [];
 }
 
 export const useProject = () => {
@@ -45,7 +45,7 @@ export const useProject = () => {
     })
     return () => applicationManagerService.removeEventListeners(id);
   }, [id]);
-  return project;
+  return project!!;
 }
 
 export const useEditTarget = <T extends HoloDocument | Schema,>(): T => {
@@ -58,7 +58,7 @@ export const useEditTarget = <T extends HoloDocument | Schema,>(): T => {
     })
     return () => applicationManagerService.removeEventListeners(id);
   }, [id]);
-  return applicationManagerService.activeForEdit as T;
+  return applicationManagerService.activeForEdit!! as T;
 }
 
 export const useSession = () => {
@@ -71,7 +71,7 @@ export const useSession = () => {
     })
     return () => applicationManagerService.removeEventListeners(id);
   }, [id, project]);
-  return applicationManagerService.activeSession;
+  return applicationManagerService.activeSession!!;
 }
 
 export const useSchema = (id: String) => {

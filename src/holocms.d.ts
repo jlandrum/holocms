@@ -9,3 +9,7 @@ declare const HOLOCMS: any | null = {
   accentColor?: () => string,
   type: string,
 }
+
+declare interface Window {
+  debugLanguages?: boolean;
+}

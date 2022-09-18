@@ -15,6 +15,8 @@ export interface UpdateListenerDef {
   listener: UpdateListener;
 }
 
+const keyRegex = /^[a-zA-Z][a-zA-Z0-9_-]{0,63}$/g
+
 export default class ApplicationManagerService {
   projects: Array<Project> = [];
   sessions: Array<Session> = [];
@@ -79,12 +81,16 @@ export default class ApplicationManagerService {
   }
 
   addDocument(document: HoloDocument) {
+    const matches = keyRegex.test(document.key);
     if (this.activeSession?.documents?.find(it => it.key === document.key)) {
-      throw new Error(i("Document already exists"));
+      throw new Error(i("error--document-exists"));
+    } else if (!matches) {
+      throw new Error(i("error--key-invalid"));
+    } else {
+      this.activeSession?.documents?.push(document);
+      this.saveState();
+      this.notifyUpdate('sessionsUpdated');  
     }
-    this.activeSession?.documents?.push(document);
-    this.saveState();
-    this.notifyUpdate('sessionsUpdated');
   }
 
   addSchema(schema: Schema) {
@@ -137,6 +143,23 @@ export default class ApplicationManagerService {
       this.activeSession?.schemas?.splice(index, 1);
     } else {
       throw new Error("Schema not found");
+    }
+    this.activeForEdit = undefined;
+    this.activeSession.lastEvent = Date.now();
+    this.saveState();
+    this.notifyUpdate('activeSessionChanged');
+    this.notifyUpdate('activeEditTargetChanged');
+  }
+
+  deleteDocument(document: HoloDocument) {
+    if (!this.activeSession) { 
+      throw new Error("No active session")
+    }
+    const index = this.activeSession?.documents?.findIndex((s) => s.key === document.key);
+    if (index >= 0) {
+      this.activeSession?.documents?.splice(index, 1);
+    } else {
+      throw new Error("Document not found");
     }
     this.activeForEdit = undefined;
     this.activeSession.lastEvent = Date.now();

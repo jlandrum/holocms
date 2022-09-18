@@ -7,7 +7,6 @@ import Button from "../units/Button";
 import { BiSave, BiPlus, BiTrashAlt } from "react-icons/bi";
 import TextBox from "../units/TextBox";
 import Text from "../units/Text";
-import { ConfirmDialog } from "../../dialogs/Confirm";
 import { i } from "../../lang/I18N";
 import { AddSchemaItemDialog } from "../../dialogs/AddSchemaItem";
 import { useNotice } from "../../dialogs/Notice";
@@ -76,7 +75,7 @@ const SchemaEditor = () => {
     setShowInsert(true);
   }
 
-  const insert = (type: string, title: string) => {    
+  const insert = (type: string, key: string, title: string) => {    
     const rootKeyPath = showInsertKey.replace(INDEX_REGEX, '');
     const copy = cloneDeep(editedSchema);
 
@@ -94,9 +93,11 @@ const SchemaEditor = () => {
       { 
         type: type as unknown as any, 
         name: title,
+        key: key,
         ...extraAttributes
       }
     )
+
     setEditedSchema(copy);
   }
 
@@ -135,7 +136,7 @@ const SchemaEditor = () => {
           {editedSchema?.items?.length === 0 && (
             <div className="flex p-12 justify-center items-center h-full">
               <Text className="text-xs text-center">
-                This schema is empty. Press <BiPlus className="inline" /> in the upper right toolbar to add an item.
+                {i('schema-empty', <BiPlus className="inline" />)}
               </Text>
             </div>
           )}

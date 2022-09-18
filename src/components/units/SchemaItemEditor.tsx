@@ -7,7 +7,9 @@ import { forwardRef } from "react";
 import { SchemaTextEditor } from "./SchemaTextEditor";
 import { SchemaArrayEditor } from "./SchemaArrayEditor";
 import { SchemaUnknownEditor } from "./SchemaUnknownEditor";
+import { SchemaEmptyEditor } from "./SchemaEmptyEditor";
 import { SchemaSubSchemaEditor } from "./SchemaSubSchemaEditor";
+import { SchemaSelectEditor } from "./SchemaSelectEditor";
 
 export type Feature = 'firstItem' | 'lastItem' | 'canAdd' | 'canConfigure';
 
@@ -30,7 +32,12 @@ export const SchemaItemEditor = forwardRef<HTMLDivElement,SchemaItemEditorProps>
         return SchemaSubSchemaEditor;
       case 'group':  
       case 'array':
-        return SchemaArrayEditor;  
+        return SchemaArrayEditor;
+      case 'boolean':
+      case 'any':
+        return SchemaEmptyEditor;  
+      case 'select':
+        return SchemaSelectEditor;
       default:
         return SchemaUnknownEditor;  
     }
@@ -40,13 +47,21 @@ export const SchemaItemEditor = forwardRef<HTMLDivElement,SchemaItemEditorProps>
     onUpdate?.(name, `${keyPath}.name`);
   }
 
+  const updateKey = (key: string) => {
+    onUpdate?.(key, `${keyPath}.key`);
+  }
+
   const effectiveFeatures = [...features || [], ...(Editor as any).features || []]
 
   return (
     <div ref={ref} className="flex border p-2 mt-2 dark:border-black rounded-md bg-black bg-opacity-nested dark:bg-white dark:bg-opacity-nested flex-col w-full flex-shrink-0 gap-2 max-w-md ">
       <div className="flex justify-between  items-center">
         <div className="flex gap-2 items-center">
-          <TextBox inline className="text-xs -mx-1 px-1 -my-0.5 py-0.5" value={item.name} onValueChange={updateName}/>
+          <div className="flex gap-1 items-center">
+            <TextBox inline className="text-xs -mx-1 px-1 -my-0.5 py-0.5" value={item.name} onValueChange={updateName}/>
+            <Text>:</Text>
+            <TextBox inline className="text-xs -mx-1 px-1 -my-0.5 py-0.5" value={item.key} onValueChange={updateKey}/>
+          </div>
           <Text customStyle  className="text-tiny text-neutral-600 dark:text-neutral-500">{item.type as string}</Text>
         </div>
         <div className="flex flex-row gap-0.5">

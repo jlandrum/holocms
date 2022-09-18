@@ -1,6 +1,6 @@
-import { useAppManager, useEditTarget, useSchema } from "../units/ApplicationManager";
+import { useAppManager, useEditTarget } from "../units/ApplicationManager";
 import Button from "../units/Button";
-import { BiCodeBlock, BiLayout, BiSave, BiShowAlt, BiPencil } from 'react-icons/bi';
+import { BiCodeBlock, BiLayout, BiSave, BiShowAlt, BiPencil, BiTrash } from 'react-icons/bi';
 
 import { useEffect, useState } from "react";
 import TextBox from "../units/TextBox";
@@ -11,6 +11,7 @@ import DocumentTextEditor from "./DocumentTextEditor";
 import DocumentBlockEditor from "./DocumentBlockEditor";
 import { useNotice } from "../../dialogs/Notice";
 import { i } from "../../lang/I18N";
+import { ErrorBoundary } from "../units/ErrorBoundary";
 
 const DocumentEditor = () => {
   const document = useEditTarget<HoloDocument>()!!;
@@ -42,6 +43,12 @@ const DocumentEditor = () => {
     appManager.updateDocument(newDoc);
   }
 
+  const deleteDocument = () => {
+    showNotice(i('confirm--delete-document'), i('delete'), i('cancel'), () => {
+      appManager.deleteDocument(document);
+    })
+  }
+
   useEffect(() => {
     setTitle(document.title || '');
     setContent(document.content || '');
@@ -59,7 +66,7 @@ const DocumentEditor = () => {
                     setType(0);
                     break;
                   case 1:
-                    setContent({ schema: '', content: []});
+                    setContent({ schema: '', content: {}});
                     setType(1);
                     break;
                 }            
@@ -88,18 +95,26 @@ const DocumentEditor = () => {
         <Button type="icon" onClick={updateDocument}>
           <BiSave className="dark:text-white m-2" />
         </Button>
-
+        <Button type="icon" onClick={deleteDocument}>
+          <BiTrash className="dark:text-white m-2" />
+        </Button>
       </div>
-      {mode === 0 && <DocumentPreview document={document} />}
+      {mode === 0 && <DocumentPreview document={{...document, title, content}} />}
       {
         mode === 1 && (
-          <div className="p-2 flex flex-col gap-2 h-full overflow-y-auto scrollbar scrollbar-thin">
-            <Text>Title</Text>
+          <div className="p-2 flex flex-col gap-2 h-full overflow-y-auto scrollbar-thin">
+            <Text>{i('title')}</Text>
             <TextBox value={title} onValueChange={setTitle} />
             {type === 0 && (
-              <DocumentTextEditor content={content} setContent={setContent}></DocumentTextEditor>)}
+              <ErrorBoundary>
+                <DocumentTextEditor content={content} setContent={setContent}></DocumentTextEditor>
+              </ErrorBoundary>
+            )}
             {type === 1 && (
-              <DocumentBlockEditor content={content} setContent={setContent}></DocumentBlockEditor>)}
+              <ErrorBoundary>
+                <DocumentBlockEditor content={content} setContent={setContent}></DocumentBlockEditor>
+              </ErrorBoundary>
+            )}
           </div>
         )
       }

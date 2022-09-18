@@ -32,7 +32,7 @@ const ManagePanel = () => {
         <div className='overflow-scroll scrollbar-thin scrollbar-thumb-rounded-lg scrollbar-thumb-neutral-500 scrollbar-track-transparent flex-grow bg-neutral-100 dark:bg-neutral-900'>
           <div className='flex flex-row pl-4 pr-2 items-center justify-between text-neutral-500 dark:text-neutral-500'>
             <Text customStyle className='text-tiny py-1 font-bold'>
-              Documents
+              {i('documents')}
             </Text>
             <Button type='icon' 
                   className=''
@@ -41,6 +41,9 @@ const ManagePanel = () => {
             </Button>
           </div>
           <div className='flex flex-col gap-1 m-1'>
+            {(session?.documents?.length === 0 || !session?.schemas) && (
+              <Text className='text-xs mx-2 opacity-60'>{i('no-documents')}</Text>
+            )}
             {session?.documents?.map(doc => (
               <Button type="listItem" 
                       key={doc.key}
@@ -50,7 +53,7 @@ const ManagePanel = () => {
           </div>
           <div className='flex flex-row pl-4 pr-2 items-center justify-between text-neutral-500 dark:text-neutral-500'>
             <Text customStyle className='text-tiny py-1 font-bold'>
-              Schemas
+              {i('schemas')}
             </Text>
             <Button type='icon' 
                   className=''

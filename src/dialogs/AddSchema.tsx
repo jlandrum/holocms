@@ -7,6 +7,7 @@ import Text from '../components/units/Text';
 import TextBox from '../components/units/TextBox';
 import { v4 as uuidv4 } from 'uuid';
 import { useNotice } from './Notice';
+import { i } from '../lang/I18N';
 
 const AddSchema = () => {
   const close = useClose();
@@ -27,14 +28,14 @@ const AddSchema = () => {
   return (
     <>
       <div className='flex flex-col w-96 gap-2'>
-        <Text className='text-sm text-bold'>Add Schema</Text>
+        <Text className='text-sm text-bold'>{i('add-schema')}</Text>
         <div className='flex flex-col gap-1'>
-          <Text className='text-bold'>Title</Text>
+          <Text className='text-bold'>{i('title')}</Text>
           <TextBox value={name} onValueChange={setName} />
         </div>
         <div className='flex flex-row-reverse gap-2 mt-2'>
-          <Button type='primary' onClick={addDocument}>Add</Button>
-          <Button onClick={close}>Cancel</Button>
+          <Button type='primary' onClick={addDocument}>{i('add')}</Button>
+          <Button onClick={close}>{i('cancel')}</Button>
         </div>
       </div>
     </>
